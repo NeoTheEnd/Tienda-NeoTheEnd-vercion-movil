@@ -1,0 +1,91 @@
+<!-- 6.-historial.html-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Historial de Compras</title>
+  <link rel="stylesheet" href="principal.css">
+  <style>
+    table {
+      width: 90%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background: #2d2d3c;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #555;
+      text-align: center;
+      color: #fff;
+    }
+    th {
+      background: linear-gradient(to right, #6c5ce7, #00cec9);
+    }
+    .btn {
+      background: linear-gradient(to right, #6c5ce7, #00cec9);
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s;
+      font-weight: bold;
+      margin: 20px;
+      display: block;
+      width: 200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Historial de Compras</h1>
+  </header>
+  <main>
+    <section id="historial">
+      <h2>🧾 Tus Compras</h2>
+      <div id="tabla-historial"></div>
+    </section>
+    <section style="text-align:center; margin-top:20px;">
+      <button class="btn" onclick="window.location.href='principal.html'">Volver al Menu</button>
+      <button class="btn" onclick="cerrarSesion()">Cerrar sesión</button>
+    </section>
+  </main>
+  <footer>
+    <p>© 2025 Tienda de Juegos - NeoTheEnd</p>
+  </footer>
+  <script>
+    const usuarioHistorial = JSON.parse(localStorage.getItem("usuario_actual"));
+    const historial = usuarioHistorial?.historial || [];
+    const contenedor = document.getElementById("tabla-historial");
+    if (historial.length === 0) {
+      contenedor.innerHTML = "<p>No hay compras registradas.</p>";
+    } else {
+      // Construir tabla
+      let tableHTML = "<table><thead><tr><th>Fecha</th><th>Juego</th><th>Precio (Bs)</th><th>Formato</th></tr></thead><tbody>";
+      historial.forEach(compra => {
+        compra.productos.forEach(prod => {
+          tableHTML += `<tr>
+                          <td>${compra.fecha}</td>
+                          <td>${prod.titulo}</td>
+                          <td>${prod.precio}</td>
+                          <td>${prod.formato || 'N/A'}</td>
+                        </tr>`;
+        });
+      });
+      tableHTML += "</tbody></table>";
+      contenedor.innerHTML = tableHTML;
+    }
+    function cerrarSesion() {
+      localStorage.removeItem("usuario_actual");
+      alert("Sesión cerrada.");
+      window.location.href = "registro.html";
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!-- 3.-productos.html-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tienda de Juegos - PS2</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="principal.css">
+  <script src="principal.js" defer></script>
+</head>
+<body>
+  <header>
+    <!-- Se incluye solo el título en el h1 -->
+    <h1>
+      <img src="personajes/27322391-a5a1-489c-af01-8a347b21d5b1.png" >
+      Tienda de Juegos No Game No Life
+    </h1>
+    <p>Los mejores precios, recomendaciones y mantenimiento de la ciudad</p>
+  </header>
+  <!-- Menú con el botón de carrito integrado -->
+  <nav class="menu">
+    <ul id="menu-lista">
+      <li><a href="principal.html">Inicio</a></li>
+      <li><a href="servicios.html">Servicios</a></li>
+      <li><a href="productos.html">Juegos</a></li>
+      <li><a href="contacto.html">Contacto</a></li>
+      <li><a href="registro.html">Registro</a></li>
+    </ul>
+    <!-- Se agrega el botón de carrito dentro del nav, posicionado a la derecha -->
+    <button id="btn-carrito" onclick="mostrarCarrito()">
+      <i class="fas fa-shopping-cart"></i> <span id="btn-carrito-text">Carrito (0)</span>
+    </button>
+  </nav>
+  <main>
+    <div id="filtros-categorias">
+      <button onclick="filtrarCategoria('todas')">Mostrar Todos</button>
+      <button onclick="filtrarCategoria('Acción')">Acción</button>
+      <button onclick="filtrarCategoria('Terror')">Terror</button>
+      <button onclick="filtrarCategoria('Pelea')">Pelea</button>
+      <button onclick="filtrarCategoria('RPG')">RPG</button>
+    </div>
+    <section id="juegos">
+      <h2>Categorías de Juegos</h2>
+      <div class="categorias">
+        <!-- Categoría: Acción -->
+        <div class="categoria" data-categoria="Acción">
+          <h3>Acción</h3>
+          <div class="juego" onclick="showJuegoDetails('godofwar')">
+            <img src="portadas/god-of-war.jpg" alt="God of War">
+            <p>God of War</p>
+          </div>
+          <div class="juego" onclick="showJuegoDetails('godhand')">
+            <img src="portadas/god-hand.jpg" alt="God Hand">
+            <p>God Hand</p>
+          </div>
+          <div class="juego" onclick="showJuegoDetails('princewarrior')">
+            <img src="portadas/prince-of-persia-warrior-within.jpg" alt="Prince of Persia: Warrior Within">
+            <p>Prince of Persia: Warrior Within</p>
+          </div>
+          <div class="juego" onclick="showJuegoDetails('mgs3')">
+            <img src="portadas/metal-gear-solid-3-snake-eater.jpg" alt="Metal Gear Solid 3">
+            <p>Metal Gear Solid 3</p>
+          </div>
+          <div class="juego" onclick="showJuegoDetails('devilmaycry3')">
+            <img src="portadas/devil-may-cry-3-dantes-awakening-special-edition.jpg" alt="Devil May Cry 3">
+            <p>Devil May Cry 3</p>
+          </div>
+          <div class="juego" onclick="showJuegoDetails('black')">
+            <img src="portadas/black.jpg" alt="Black">
+            <p>Black</p>
+          </div>
+        </div>
+        <!-- Categoría: Terror -->
+        <div class="categoria" data-categoria="Terror">
+          <h3>Terror</h3>
+          <div class="juego" onclick="showJuegoDetails('silenthill2')">
+            <img src="portadas/silent-hill-2.jpg" alt="Silent Hill 2">
+            <p>Silent Hill 2</p>
+          </div>
+          <div class="juego" onclick="showJuegoDetails('fatalframe2')">
+            <img src="portadas/fatal-frame-ii-crimson-butterfly.jpg" alt="Fatal Frame II">
+            <p>Fatal Frame II</p>
+          </div>
+          <div class="juego" onclick="showJuegoDetails('recodeveronica')">
+            <img src="portadas/resident-evil-code-veronica-x.jpg" alt="Resident Evil Code Veronica X">
+            <p>Resident Evil Code: Veronica X</p>
+          </div>
+          <div class="juego" onclick="showJuegoDetails('ruleofrose')">
+            <img src="portadas/rule-of-rose.jpg" alt="Rule of Rose">
+            <p>Rule of Rose</p>
+          </div>
+          <div class="juego" onclick="showJuegoDetails('resident4')">
+            <img src="portadas/Resident-Evil-4-Español-Latino.jpg" alt="Resident Evil 4">
+            <p>Resident Evil 4</p>
+          </div>
+          <div class="juego" onclick="showJuegoDetails('clocktower3')">
+            <img src="portadas/haunting-ground.jpg" alt="Haunting Ground">
+            <p>Haunting Ground</p>
+          </div>
+        </div>
+        <!-- Categoría: Pelea -->
+        <div class="categoria" data-categoria="Pelea">
+          <h3>Pelea</h3>
+          <div class="juego" onclick="showJuegoDetails('tekken5')">
+            <img src="portadas/Tekken-5-Japan-PS2.jpg" alt="Tekken 5">
+            <p>Tekken 5</p>
+          </div>
+          <div class="juego" onclick="showJuegoDetails('mortalcombatshaolin')">
+            <img src="portadas/mortal-kombat-armageddon.jpg" alt="Mortal Kombat Armageddon">
+            <p>Mortal Kombat Armageddon</p>
+          </div>
+          <div class="juego" onclick="showJuegoDetails('dbzbt3')">
+            <img src="portadas/DBZ-Budokai-Tenkaichi-2-Latino-PS2.jpg" alt="DBZ BT3">
+            <p>DBZ: Budokai Tenkaichi 3</p>
+          </div>
+          <div class="juego" onclick="showJuegoDetails('naruto5')">
+            <img src="portadas/naruto-shippuden-ultimate-ninja-5.jpg" alt="Naruto Ultimate Ninja 5">
+            <p>Naruto: Ultimate Ninja 5</p>
+          </div>
+          <div class="juego" onclick="showJuegoDetails('soulcalibur3')">
+            <img src="portadas/Soulcalibur-III-Japan-PS2.jpg" alt="Soul Calibur 3">
+            <p>Soul Calibur 3</p>
+          </div>
+          <div class="juego" onclick="showJuegoDetails('capcomvsnks2')">
+            <img src="portadas/marvel-vs-capcom-2-new-age-of-heroes.jpg" alt="Marvel vs Capcom 2">
+            <p>Marvel vs Capcom 2</p>
+          </div>
+        </div>
+        <!-- Categoría: RPG -->
+        <div class="categoria" data-categoria="RPG">
+          <h3>RPG</h3>
+          <div class="juego" onclick="showJuegoDetails('finalfantasyx')">
+            <img src="portadas/final-fantasy-x.jpg" alt="Final Fantasy X">
+            <p>Final Fantasy X</p>
+          </div>
+          <div class="juego" onclick="showJuegoDetails('kingdomhearts')">
+            <img src="portadas/kingdom-hearts-ii.jpg" alt="Kingdom Hearts 2">
+            <p>Kingdom Hearts 2</p>
+          </div>
+          <div class="juego" onclick="showJuegoDetails('ddsaga')">
+            <img src="portadas/shin-megami-tensei-digital-devil-saga.jpg" alt="Digital Devil Saga">
+            <p>Digital Devil Saga</p>
+          </div>
+          <div class="juego" onclick="showJuegoDetails('suikoden5')">
+            <img src="portadas/suikoden-v.jpg" alt="Suikoden V">
+            <p>Suikoden V</p>
+          </div>
+          <div class="juego" onclick="showJuegoDetails('persona3')">
+            <img src="portadas/persona-3-fes-1.jpg" alt="Persona 3">
+            <p>Persona 3</p>
+          </div>
+          <div class="juego" onclick="showJuegoDetails('dragonquest')">
+            <img src="portadas/dragon-quest-the-journey-of-the-cursed-king.jpg" alt="Dragon Quest VIII">
+            <p>Dragon Quest VIII</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Modal de Detalle del Juego -->
+    <div id="detalle-juego" class="detalle-juego" style="display: none;">
+      <h3 id="juego-titulo"></h3>
+      <img id="juego-imagen" src="" alt="Imagen del juego">
+      <p id="juego-sinopsis"></p>
+      <p id="juego-caracteristicas"></p>
+      <p id="juego-precio"><strong>Precio: 6 Bs</strong></p>
+      <!-- Nueva selección de Formato -->
+      <div id="formato-seleccion">
+        <label>Formato:
+          <input type="radio" name="formato" value="Digital" checked> Digital
+          <input type="radio" name="formato" value="Físico"> Físico
+        </label>
+      </div>
+      <video id="juego-video" width="320" height="240" controls>
+        <source id="juego-video-src" src="" type="video/mp4">
+        Tu navegador no soporta el video.
+      </video>
+      <div class="botones">
+        <button onclick="closeJuegoDetails()">Cerrar</button>
+        <button onclick="agregarAlCarrito()">Agregar al carrito</button>
+      </div>
+    </div>
+    <!-- Carrito de Compras (se mantiene en su lugar) -->
+    <div id="carrito" class="carrito" style="display: none;">
+      <h2>Carrito de Compras</h2>
+      <ul id="carrito-lista"></ul>
+      <p>Total: <span id="total-carrito">0</span> Bs</p>
+      <button onclick="mostrarOpcionesPago()">Opciones de pago</button>
+      <button onclick="pagar()">Pagar</button>
+      <button onclick="cerrarCarrito()">Cerrar</button>
+      <div id="opciones-pago" style="display: none; margin-top: 20px;">
+        <h3>Métodos de Pago</h3>
+        <label>
+          <input type="radio" name="metodo-pago" value="qr" onchange="mostrarMetodoPago()"> Pago por QR
+        </label><br>
+        <label>
+          <input type="radio" name="metodo-pago" value="efectivo" onchange="mostrarMetodoPago()"> Pago en Efectivo
+        </label><br>
+        <label>
+          <input type="radio" name="metodo-pago" value="tarjeta" onchange="mostrarMetodoPago()"> Tarjeta de Crédito/Débito
+        </label><br>
+        <div id="pago-qr" style="display: none; margin-top: 10px;">
+          <p>Escanea el siguiente QR para realizar el pago:</p>
+          <img src="personajes/QR.jpg" alt="QR de pago" width="200">
+          <p>¿Deseas más información? <a href="https://wa.me/591123456789" target="_blank">Contacta vía WhatsApp</a></p>
+        </div>
+        <div id="pago-efectivo" style="display: none; margin-top: 10px;">
+          <p>Para pago en efectivo, mándanos captura de pantalla de la lista de juegos seleccionados o del historial de pago.</p>
+          <p>Por favor comunícate por WhatsApp.</p>
+        </div>
+        <div id="pago-tarjeta" style="display: none; margin-top: 10px;">
+          <label>Número de Tarjeta: <input type="text" placeholder="**** **** **** ****"></label><br>
+          <label>Fecha de Expiración: <input type="text" placeholder="MM/AA"></label><br>
+          <label>CVV: <input type="text" placeholder="123"></label><br>
+          <button onclick="confirmarPagoTarjeta()">Confirmar Pago</button>
+        </div>
+      </div>
+    </div>
+  </main>
+  <!-- Aviso emergente del carrito -->
+  <div id="aviso-carrito" style="display:none; position:fixed; bottom:20px; right:20px; background:#2ecc71; color:white; padding:10px 20px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.3); font-weight:bold; z-index:999;">
+    ✅ Producto agregado al carrito
+  </div>
+  <footer>
+    <p>© 2025 Tienda de Juegos Físicos y Digitales - NeoTheEnd</p>
+  </footer>
+</body>
+</html>

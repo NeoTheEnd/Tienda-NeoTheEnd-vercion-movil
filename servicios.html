@@ -1,0 +1,68 @@
+<!-- 2.-servicios .html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Servicios - Tienda de Juegos</title>
+  <link rel="stylesheet" href="principal.css">
+  <script src="principal.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>
+        <img src="personajes/27322391-a5a1-489c-af01-8a347b21d5b1.png" >
+        Tienda de Juegos No Game No Life
+    </h1>
+    <p>Los mejores precios, recomendaciones y mantenimiento de la ciudad</p>
+</header>
+  <nav class="menu">
+    <ul id="menu-lista">
+      <li><a href="principal.html">Inicio</a></li>
+      <li><a href="servicios.html">Servicios</a></li>
+      <li><a href="productos.html">Juegos</a></li>
+      <li><a href="contacto.html">Contacto</a></li>
+      <li><a href="registro.html">Registro</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <section class="servicios">
+      <div class="servicios-container">
+        <div class="servicio">
+          <h2>Reparación y mantenimiento de consolas</h2>
+          <p>Se ofrece mantenimiento general, cambio de pasta térmica, limpieza profunda.</p>
+          <button onclick="abrirModalServicio('consolas')">Solicitar servicio</button>
+        </div>
+
+        <div class="servicio">
+          <h2>Reparación y mantenimiento de controles</h2>
+          <p>Solucionamos drift en sticks, cambio de botones y mantenimiento general.</p>
+          <button onclick="abrirModalServicio('controles')">Solicitar servicio</button>
+        </div>
+
+        <div class="servicio">
+          <h2>Instalación y pirateo de PS2</h2>
+          <p>Instalamos FreeMCBoot, OPL, HDD y configuración completa para jugar desde USB o disco.</p>
+          <button onclick="abrirModalServicio('ps2')">Solicitar servicio</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal Servicio -->
+    <div id="modal-servicio" class="detalle-juego" style="display: none;">
+      <button onclick="cerrarModalServicio()">Cerrar</button>
+      <h3 id="titulo-servicio"></h3>
+      <p id="descripcion-servicio"></p>
+      <a id="whatsapp-link" href="#" target="_blank">
+        <button>Contactar por WhatsApp Para mas informacion</button>
+      </a>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 Tienda de Juegos Físicos y Digitales - NeoTheEnd</p>
+  </footer>
+
+</body>
+</html>

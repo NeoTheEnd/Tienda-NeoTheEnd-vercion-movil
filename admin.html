@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Administrador</title>
+  <link rel="stylesheet" href="principal.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #1f1f2e;
+      color: #fff;
+    }
+    h1, h2, h3, h4 {
+      color: #00cec9;
+      text-align: center;
+    }
+    .section-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: #2c2c3c;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      background: #3a3a4d;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #555;
+      text-align: center;
+    }
+    th {
+      background: linear-gradient(to right, #6c5ce7, #00cec9);
+    }
+    input[type="text"], input[type="number"] {
+      padding: 8px;
+      width: calc(100% - 16px);
+      margin-bottom: 10px;
+      border-radius: 4px;
+      border: none;
+    }
+    .btn {
+      background: linear-gradient(to right, #6c5ce7, #00cec9);
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s;
+      font-weight: bold;
+      margin: 10px 5px;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+    }
+    select {
+      padding: 8px;
+      width: 100%;
+      border-radius: 4px;
+      border: none;
+      margin-bottom: 10px;
+    }
+    /* Nueva sección para editar precios de juegos con filtro por categoría */
+    #editar-precios-juegos table {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Panel de Administrador</h1>
+  <div style="text-align: center;">
+    <button class="btn" onclick="window.location.href='principal.html'">Volver al Menu</button>
+    <button class="btn" onclick="cerrarSesion()">Cerrar sesión</button>
+  </div>
+  <!-- Sección de historial de compras con filtro -->
+  <div class="section-container" id="historial-compras">
+    <h2>Historial de Compras de Usuarios</h2>
+    <select id="filtro-usuario" onchange="filtrarHistorial()">
+      <option value="todos">Ver Todos</option>
+    </select>
+    <div id="tabla-historial-admin"></div>
+  </div>
+  <hr>
+  <!-- Nueva sección para editar precios de juegos con filtro por categoría -->
+  <div class="section-container" id="editar-precios-juegos">
+    <h2>Editor de Precios de Juegos</h2>
+    <select id="filtro-categoria" onchange="filtrarJuegosPorCategoria()">
+      <option value="todos">Todas las Categorías</option>
+      <option value="Acción">Acción</option>
+      <option value="Terror">Terror</option>
+      <option value="Pelea">Pelea</option>
+      <option value="RPG">RPG</option>
+    </select>
+    <table id="tabla-precios">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Juego</th>
+          <th>Categoría</th>
+          <th>Precio Actual</th>
+          <th>Nuevo Precio</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Las filas se llenarán dinámicamente -->
+      </tbody>
+    </table>
+    <button class="btn" onclick="guardarPreciosJuegos()">Guardar Cambios</button>
+  </div>
+  <script>
+    // Al cargar la página, verificar que el usuario sea administrador
+    window.onload = function() {
+      const user = JSON.parse(localStorage.getItem("usuario_actual"));
+      if (!user || user.rol !== "admin") {
+        alert("Acceso denegado. Inicia sesión como administrador.");
+        window.location.href = "registro.html";
+        return;
+      }
+      mostrarHistorialCompleto();
+      cargarPreciosJuegos();
+      cargarFiltroUsuarios();
+    };
+
+    // Función para mostrar historial de compras con filtro
+    function mostrarHistorialCompleto() {
+      const historialDiv = document.getElementById("tabla-historial-admin");
+      historialDiv.innerHTML = "";
+      let tableHTML = "<table><thead><tr><th>Usuario</th><th>Fecha</th><th>Juego</th><th>Precio (Bs)</th><th>Formato</th></tr></thead><tbody>";
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith("usuario_") && key !== "usuario_actual") {
+          const userData = JSON.parse(localStorage.getItem(key));
+          if (userData.historial && userData.historial.length > 0) {
+            userData.historial.forEach(compra => {
+              compra.productos.forEach(prod => {
+                tableHTML += `<tr>
+                  <td>${userData.nombre} (${userData.email})</td>
+                  <td>${compra.fecha}</td>
+                  <td>${prod.titulo}</td>
+                  <td>${prod.precio}</td>
+                  <td>${prod.formato || 'N/A'}</td>
+                </tr>`;
+              });
+            });
+          }
+        }
+      }
+      tableHTML += "</tbody></table>";
+      historialDiv.innerHTML = tableHTML || "<p>No hay compras registradas.</p>";
+    }
+
+    // Función para cargar y filtrar usuarios en el dropdown del historial
+    function cargarFiltroUsuarios() {
+      const filtroSelect = document.getElementById("filtro-usuario");
+      filtroSelect.innerHTML = '<option value="todos">Ver Todos</option>';
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith("usuario_") && key !== "usuario_actual") {
+          const userData = JSON.parse(localStorage.getItem(key));
+          if (userData.historial && userData.historial.length > 0) {
+            const option = document.createElement("option");
+            option.value = userData.email;
+            option.textContent = `${userData.nombre} (${userData.email})`;
+            filtroSelect.appendChild(option);
+          }
+        }
+      }
+    }
+
+    function filtrarHistorial() {
+      const filtro = document.getElementById("filtro-usuario").value;
+      const historialDiv = document.getElementById("tabla-historial-admin");
+      let tableHTML = "<table><thead><tr><th>Usuario</th><th>Fecha</th><th>Juego</th><th>Precio (Bs)</th><th>Formato</th></tr></thead><tbody>";
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith("usuario_") && key !== "usuario_actual") {
+          const userData = JSON.parse(localStorage.getItem(key));
+          if (filtro === "todos" || filtro === userData.email) {
+            if (userData.historial && userData.historial.length > 0) {
+              userData.historial.forEach(compra => {
+                compra.productos.forEach(prod => {
+                  tableHTML += `<tr>
+                    <td>${userData.nombre} (${userData.email})</td>
+                    <td>${compra.fecha}</td>
+                    <td>${prod.titulo}</td>
+                    <td>${prod.precio}</td>
+                    <td>${prod.formato || 'N/A'}</td>
+                  </tr>`;
+                });
+              });
+            }
+          }
+        }
+      }
+      tableHTML += "</tbody></table>";
+      historialDiv.innerHTML = tableHTML || "<p>No hay compras registradas.</p>";
+    }
+
+    // Nueva sección para editar precios de juegos con filtro por categoría
+    const juegosLista = [
+      { id: "godofwar", titulo: "God of War", categoria: "Acción" },
+      { id: "godhand", titulo: "God Hand", categoria: "Acción" },
+      { id: "princewarrior", titulo: "Prince of Persia: Warrior Within", categoria: "Acción" },
+      { id: "mgs3", titulo: "Metal Gear Solid 3", categoria: "Acción" },
+      { id: "devilmaycry3", titulo: "Devil May Cry 3", categoria: "Acción" },
+      { id: "black", titulo: "Black", categoria: "Acción" },
+      { id: "silenthill2", titulo: "Silent Hill 2", categoria: "Terror" },
+      { id: "fatalframe2", titulo: "Fatal Frame II", categoria: "Terror" },
+      { id: "recodeveronica", titulo: "Resident Evil Code: Veronica X", categoria: "Terror" },
+      { id: "ruleofrose", titulo: "Rule of Rose", categoria: "Terror" },
+      { id: "resident4", titulo: "Resident Evil 4", categoria: "Terror" },
+      { id: "clocktower3", titulo: "Haunting Ground", categoria: "Terror" },
+      { id: "tekken5", titulo: "Tekken 5", categoria: "Pelea" },
+      { id: "mortalcombatshaolin", titulo: "Mortal Kombat Armageddon", categoria: "Pelea" },
+      { id: "dbzbt3", titulo: "DBZ Budokai Tenkaichi 3", categoria: "Pelea" },
+      { id: "naruto5", titulo: "Naruto Ultimate Ninja 5", categoria: "Pelea" },
+      { id: "soulcalibur3", titulo: "Soul Calibur 3", categoria: "Pelea" },
+      { id: "capcomvsnks2", titulo: "Marvel vs Capcom 2", categoria: "Pelea" },
+      { id: "finalfantasyx", titulo: "Final Fantasy X", categoria: "RPG" },
+      { id: "kingdomhearts", titulo: "Kingdom Hearts 2", categoria: "RPG" },
+      { id: "ddsaga", titulo: "Digital Devil Saga", categoria: "RPG" },
+      { id: "suikoden5", titulo: "Suikoden V", categoria: "RPG" },
+      { id: "persona3", titulo: "Persona 3", categoria: "RPG" },
+      { id: "dragonquest", titulo: "Dragon Quest VIII", categoria: "RPG" }
+    ];
+
+    function cargarPreciosJuegos() {
+      const tablaBody = document.querySelector("#tabla-precios tbody");
+      tablaBody.innerHTML = "";
+      let preciosGuardados = JSON.parse(localStorage.getItem("precios_juegos") || "{}");
+      let filtroCat = document.getElementById("filtro-categoria").value;
+      juegosLista.forEach(juego => {
+        if (filtroCat === "todos" || juego.categoria === filtroCat) {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${juego.id}</td>
+            <td>${juego.titulo}</td>
+            <td>${juego.categoria}</td>
+            <td>${preciosGuardados[juego.id] ? preciosGuardados[juego.id] : 6}</td>
+            <td><input type="number" id="nuevo-precio-${juego.id}" value="${preciosGuardados[juego.id] ? preciosGuardados[juego.id] : 6}"></td>
+            <td><button class="btn" onclick="actualizarPrecioJuego('${juego.id}')">Actualizar</button></td>
+          `;
+          tablaBody.appendChild(tr);
+        }
+      });
+    }
+
+    function actualizarPrecioJuego(juegoId) {
+      let nuevoPrecio = document.getElementById("nuevo-precio-" + juegoId).value;
+      let preciosGuardados = JSON.parse(localStorage.getItem("precios_juegos") || "{}");
+      preciosGuardados[juegoId] = nuevoPrecio;
+      localStorage.setItem("precios_juegos", JSON.stringify(preciosGuardados));
+      alert("Precio actualizado para " + juegoId);
+      cargarPreciosJuegos();
+    }
+
+    function guardarPreciosJuegos() {
+      alert("Todos los precios han sido guardados.");
+    }
+
+    function filtrarJuegosPorCategoria() {
+      cargarPreciosJuegos();
+    }
+    
+    // Función para cerrar sesión, con un mensaje en consola para depuración
+    function cerrarSesion() {
+      console.log("Cerrando sesión...");
+      localStorage.removeItem("usuario_actual");
+      alert("Sesión cerrada correctamente.");
+      window.location.href = "registro.html";
+    }
+  </script>
+</body>
+</html>
